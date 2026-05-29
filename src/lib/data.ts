@@ -30,7 +30,7 @@ export const projects: Project[] = [
     longDescription:
       "J.A.R.V.I.S is a locally-running AI assistant that combines wake word detection, speech-to-text, a Gemini-powered conversational brain, and neural text-to-speech into a seamless, always-on desktop experience — built from scratch with privacy as a first principle.",
     tags: ["Python", "Gemini 2.5 Flash", "OpenAI Whisper", "PyQt6", "Edge TTS", "openWakeWord"],
-    github: "https://github.com/sauravpunjabi",
+    github: "https://github.com/sauravpunjabi/Jarvis",
     demo: null,
     featured: true,
     accentColor: "rgba(96, 165, 250, 0.12)",
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     longDescription:
       "AutoServe replaces the paper-and-Excel chaos of auto service shops with a structured, multi-tenant platform. It handles service bookings, job card management, inventory tracking, invoice generation, and role-based access — all built on a normalized PostgreSQL schema with JWT authentication.",
     tags: ["React 18", "TypeScript", "Node.js", "PostgreSQL", "JWT", "Express.js"],
-    github: "https://github.com/sauravpunjabi",
+    github: "https://github.com/sauravpunjabi/AutoServe",
     demo: "https://autoserve-three.vercel.app",
     featured: true,
     accentColor: "rgba(52, 211, 153, 0.08)",
@@ -146,7 +146,7 @@ export const projects: Project[] = [
     longDescription:
       "Questro transforms passive interview prep into an active, personalized experience. Users configure their target role, stack, difficulty level, and question count — then enter a simulated interview session. Responses are analyzed by Gemini API and stored in Firebase for longitudinal progress tracking.",
     tags: ["Next.js", "TypeScript", "Firebase", "Gemini API", "Tailwind CSS"],
-    github: "https://github.com/sauravpunjabi",
+    github: "https://github.com/sauravpunjabi/Questro",
     demo: null,
     featured: true,
     accentColor: "rgba(167, 139, 250, 0.08)",
