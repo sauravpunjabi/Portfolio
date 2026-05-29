@@ -89,7 +89,7 @@ export const projects: Project[] = [
       "AutoServe replaces the paper-and-Excel chaos of auto service shops with a structured, multi-tenant platform. It handles service bookings, job card management, inventory tracking, invoice generation, and role-based access — all built on a normalized PostgreSQL schema with JWT authentication.",
     tags: ["React 18", "TypeScript", "Node.js", "PostgreSQL", "JWT", "Express.js"],
     github: "https://github.com/sauravpunjabi",
-    demo: "https://autoserve-demo.vercel.app",
+    demo: "https://autoserve-three.vercel.app",
     featured: true,
     accentColor: "rgba(52, 211, 153, 0.08)",
     problem:
