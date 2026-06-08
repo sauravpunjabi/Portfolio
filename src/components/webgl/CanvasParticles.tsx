@@ -2,54 +2,62 @@
 
 import { useEffect, useRef, useCallback } from "react";
 
-interface Particle {
-  x: number;
+interface Particle3D {
+  x: number;   // 3D coordinates relative to center
   y: number;
+  z: number;
   baseX: number;
   baseY: number;
-  vx: number;
-  vy: number;
+  baseZ: number;
   size: number;
-  fill: string; // pre-built — never recreated in the hot loop
+  fill: string;
 }
 
 const COLORS = [
-  { r: 96,  g: 165, b: 250 }, // blue-400  — 55%
-  { r: 96,  g: 165, b: 250 }, // blue-400  — extra weight
-  { r: 96,  g: 165, b: 250 }, // blue-400
-  { r: 100, g: 116, b: 139 }, // slate-500
-  { r: 220, g: 220, b: 230 }, // near-white
+  { r: 255, g: 255, b: 255 }, // White — 50% weight
+  { r: 255, g: 255, b: 255 },
+  { r: 108, g: 117, b: 125 }, // Muted gray #6c757d
+  { r: 73,  g: 80,  b: 87  }, // Border gray #495057
 ];
 
-function makeParticle(w: number, h: number): Particle {
-  const c       = COLORS[Math.floor(Math.random() * COLORS.length)];
-  const isBlue  = c.r === 96;
-  const opacity = isBlue
-    ? Math.round((Math.random() * 0.32 + 0.08) * 20) / 20 // discrete → fewer unique strings
+function makeParticle3D(w: number, h: number): Particle3D {
+  const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const isWhite = c.r === 255;
+  const opacity = isWhite
+    ? Math.round((Math.random() * 0.12 + 0.04) * 20) / 20
     : Math.round((Math.random() * 0.08 + 0.02) * 20) / 20;
-  const x = Math.random() * w;
-  const y = Math.random() * h;
+
+  // Distribute particles randomly in a 3D box
+  const rangeX = w * 1.5;
+  const rangeY = h * 1.5;
+  const rangeZ = 800; // depth range
+
+  const x = (Math.random() - 0.5) * rangeX;
+  const y = (Math.random() - 0.5) * rangeY;
+  const z = Math.random() * rangeZ; // 0 (near) to 800 (far)
+
   return {
-    x, y,
+    x, y, z,
     baseX: x,
     baseY: y,
-    vx: (Math.random() - 0.5) * 0.1,
-    vy: (Math.random() - 0.5) * 0.1,
-    size: isBlue ? Math.random() * 1.6 + 0.5 : Math.random() * 0.8 + 0.2,
+    baseZ: z,
+    size: isWhite ? Math.random() * 1.2 + 0.4 : Math.random() * 0.7 + 0.2,
     fill: `rgba(${c.r},${c.g},${c.b},${opacity})`,
   };
 }
 
 export default function CanvasParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particles = useRef<Particle[]>([]);
-  const mouse     = useRef({ x: -9999, y: -9999 });
-  const raf       = useRef<number>(0);
-  const prevTs    = useRef<number>(0);
+  const particles = useRef<Particle3D[]>([]);
+  const mouse = useRef({ x: 0, y: 0 }); // Relative to center
+  const targetCam = useRef({ x: 0, y: 0 });
+  const currentCam = useRef({ x: 0, y: 0 });
+  const raf = useRef<number>(0);
+  const prevTs = useRef<number>(0);
 
   const init = useCallback((w: number, h: number) => {
-    const ps = Array.from({ length: 900 }, () => makeParticle(w, h));
-    // sort once so the draw loop stays within the same fillStyle as long as possible
+    const ps = Array.from({ length: 700 }, () => makeParticle3D(w, h));
+    // Sort by fill to optimize drawing batches
     ps.sort((a, b) => (a.fill < b.fill ? -1 : 1));
     particles.current = ps;
   }, []);
@@ -61,75 +69,101 @@ export default function CanvasParticles() {
     if (!ctx) return;
 
     const onResize = () => {
-      canvas.width  = window.innerWidth;
+      canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       init(canvas.width, canvas.height);
     };
-    const onMouse = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
+
+    const onMouseMove = (e: MouseEvent) => {
+      // Mouse coordinates relative to screen center
+      const mx = e.clientX - window.innerWidth / 2;
+      const my = e.clientY - window.innerHeight / 2;
+      mouse.current = { x: mx, y: my };
+      // Pan camera slightly based on mouse
+      targetCam.current = { x: mx * 0.12, y: my * 0.12 };
     };
 
     onResize();
     window.addEventListener("resize", onResize);
-    window.addEventListener("mousemove", onMouse, { passive: true });
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
-    const R  = 120;
-    const R2 = R * R;
+    const focalLength = 350; // Perspective focal depth
+    const maxZ = 800;
 
     const draw = (ts: number) => {
-      const dt    = Math.min(ts - prevTs.current, 50) / (1000 / 60);
+      const dt = Math.min(ts - prevTs.current, 50) / (1000 / 60);
       prevTs.current = ts;
 
-      const { width: w, height: h } = canvas;
-      const { x: mx, y: my } = mouse.current;
+      const w = canvas.width;
+      const h = canvas.height;
 
-      // Cinematic trail — translucent bg instead of clear
-      ctx.fillStyle = "rgba(9,9,11,0.15)";
+      // Lerp camera coordinates
+      currentCam.current.x += (targetCam.current.x - currentCam.current.x) * 0.04 * dt;
+      currentCam.current.y += (targetCam.current.y - currentCam.current.y) * 0.04 * dt;
+
+      // Fade clear frame using the warm dark background #212529
+      ctx.fillStyle = "rgba(33, 37, 41, 0.18)";
       ctx.fillRect(0, 0, w, h);
 
-      // ── Update positions (no canvas calls here) ──────────────────────
-      for (const p of particles.current) {
-        p.baseX += p.vx * dt;
-        p.baseY += p.vy * dt;
-        if (p.baseX < -4) p.baseX = w + 4;
-        if (p.baseX > w + 4) p.baseX = -4;
-        if (p.baseY < -4) p.baseY = h + 4;
-        if (p.baseY > h + 4) p.baseY = -4;
+      // ── Update and Project Particles ──
+      const ps = particles.current;
+      for (const p of ps) {
+        // Slowly drift particles forward (z decreases)
+        p.z -= 0.6 * dt;
 
-        let tx = p.baseX;
-        let ty = p.baseY;
-
-        const dx    = p.baseX - mx;
-        const dy    = p.baseY - my;
-        const dist2 = dx * dx + dy * dy;
-
-        if (dist2 < R2 && dist2 > 0) {
-          const dist = Math.sqrt(dist2);
-          const f    = ((1 - Math.cos((dist / R) * Math.PI)) * 0.5 - 1) * -11;
-          tx += (dx / dist) * f;
-          ty += (dy / dist) * f;
+        // Reset if they pass the camera/view threshold
+        if (p.z <= -focalLength) {
+          p.z = maxZ;
+          p.x = (Math.random() - 0.5) * (w * 1.5);
+          p.y = (Math.random() - 0.5) * (h * 1.5);
         }
 
-        // lazy lerp — gives the floaty, smooth feel
-        p.x += (tx - p.x) * 0.035;
-        p.y += (ty - p.y) * 0.035;
+        // Apply mouse gravity/displacement in 3D
+        const dx = p.x - mouse.current.x * 0.8;
+        const dy = p.y - mouse.current.y * 0.8;
+        const distSq = dx * dx + dy * dy;
+
+        // Push away slightly in 3D space on mouse proximity
+        if (distSq < 15000 && distSq > 0) {
+          const dist = Math.sqrt(distSq);
+          const push = (1 - dist / 122) * 2;
+          p.x += (dx / dist) * push * dt;
+          p.y += (dy / dist) * push * dt;
+        }
+
+        // Restoring drift towards original center coordinates
+        p.x += (p.baseX - p.x) * 0.01 * dt;
+        p.y += (p.baseY - p.y) * 0.01 * dt;
       }
 
-      // ── Batched draw — one ctx.fill() per unique fillStyle ───────────
-      // Particles are sorted by fill at init, so batches stay long.
+      // Group drawings by color batches
       let activeFill = "";
-      for (const p of particles.current) {
+      for (const p of ps) {
+        // 3D perspective projection formula
+        const scale = focalLength / (focalLength + p.z);
+        
+        // Translate world coords to screen center and apply camera offset panning
+        const sx = w / 2 + (p.x - currentCam.current.x) * scale;
+        const sy = h / 2 + (p.y - currentCam.current.y) * scale;
+        const projectedSize = p.size * scale;
+
+        // Skip drawing if particle falls out of screen boundaries
+        if (sx < 0 || sx > w || sy < 0 || sy > h || projectedSize <= 0) {
+          continue;
+        }
+
         if (p.fill !== activeFill) {
-          if (activeFill !== "") ctx.fill(); // flush previous batch
+          if (activeFill !== "") ctx.fill(); // Draw previous batch
           ctx.beginPath();
           ctx.fillStyle = p.fill;
-          activeFill    = p.fill;
+          activeFill = p.fill;
         }
-        // moveTo resets the sub-path start so arcs don't connect
-        ctx.moveTo(p.x + p.size, p.y);
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+
+        ctx.moveTo(sx + projectedSize, sy);
+        ctx.arc(sx, sy, projectedSize, 0, Math.PI * 2);
       }
-      if (activeFill !== "") ctx.fill(); // flush last batch
+      
+      if (activeFill !== "") ctx.fill(); // Flush final batch
 
       raf.current = requestAnimationFrame(draw);
     };
@@ -138,7 +172,7 @@ export default function CanvasParticles() {
 
     return () => {
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMouse);
+      window.removeEventListener("mousemove", onMouseMove);
       cancelAnimationFrame(raf.current);
     };
   }, [init]);

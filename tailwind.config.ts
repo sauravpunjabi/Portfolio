@@ -9,16 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        mono: ["var(--font-mono)", "IBM Plex Mono", "monospace"],
       },
       colors: {
-        background: "#09090B",
-        surface: "#18181B",
-        accent: "#60A5FA",
+        themeBg: "#212529",
+        surface: "#000000",
+        themeText: "#ffffff",
+        "text-muted": "#6c757d",
+        border: "#495057",
+        accent: "#7C3AED",
+        "accent-dim": "rgba(124,58,237,0.15)",
       },
       animation: {
         "spin-slow": "spin 20s linear infinite",
+        marquee: "marquee 28s linear infinite",
+        "marquee-slow": "marquee 45s linear infinite",
+        "marquee-reverse": "marquee 28s linear infinite reverse",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
     },
   },

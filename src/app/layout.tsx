@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { IBM_Plex_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/core/Navbar";
-import CustomCursor from "@/components/core/CustomCursor";
 import LenisProvider from "@/components/core/LenisProvider";
+import AudioToggle from "@/components/core/AudioToggle";
+import CustomCursor from "@/components/core/CustomCursor";
+import ScrollIndicator from "@/components/core/ScrollIndicator";
+
+const monoFont = IBM_Plex_Mono({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Saurav Punjabi — Frontend-Focused Fullstack Developer",
@@ -35,14 +43,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
-      suppressHydrationWarning
-    >
-      <body className="bg-[#09090B] text-[#FAFAFA] antialiased overflow-x-hidden relative">
+    <html lang="en" className={monoFont.variable}>
+      <body className="bg-themeBg text-themeText antialiased overflow-x-hidden relative">
         <LenisProvider>
           <CustomCursor />
+          <ScrollIndicator />
+          <AudioToggle />
           <Navbar />
           <main>{children}</main>
         </LenisProvider>

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.aboutluca.com)",
+      "Read(//c/Users/saura/.claude/projects/c--Users-saura-OneDrive-Desktop-codes-Portfolio-v2/memory/**)"
+    ]
+  }
+}

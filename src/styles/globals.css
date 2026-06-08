@@ -4,41 +4,67 @@
 
 @layer base {
   :root {
-    --bg: #09090B;
-    --surface: #18181B;
-    --border: rgba(255, 255, 255, 0.08);
-    --text-primary: #FAFAFA;
-    --text-secondary: #A1A1AA;
-    --accent: #60A5FA;
-    --accent-dim: rgba(96, 165, 250, 0.15);
-    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    /* aboutluca-exact neutral palette — no accent color */
+    --bg: #212529;
+    --surface: #000000;
+    --text: #ffffff;
+    --text-muted: #6c757d;
+    --border: #495057;
+    --border-subtle: rgba(73, 80, 87, 0.4);
   }
 
   *, *::before, *::after {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    cursor: none !important;
+  }
+
+  /* Hide native cursor on pointer devices — custom cursor takes over */
+  @media (hover: hover) and (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
   }
 
   html {
     scroll-behavior: auto;
-    cursor: none !important;
+    background-color: var(--bg);
+    color: var(--text);
   }
 
   body {
     background-color: var(--bg);
-    color: var(--text-primary);
-    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    color: var(--text);
+    font-family: var(--font-mono), "IBM Plex Mono", monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    cursor: none !important;
+    line-height: 1.5;
   }
 
+  /* Film grain noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9001;
+    opacity: 0.038;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  /* Monospace font lock — IBM Plex Mono everywhere */
+  h1, h2, h3, h4, h5, h6, p, a, span, button, input,
+  textarea, select, label, table, th, td, li, ul, ol, div {
+    font-family: var(--font-mono), "IBM Plex Mono", monospace !important;
+  }
+
+  /* Neutral selection — white on dark */
   ::selection {
-    background-color: rgba(96, 165, 250, 0.25);
-    color: #FAFAFA;
+    background-color: #ffffff;
+    color: #212529;
   }
 
   ::-webkit-scrollbar {
@@ -47,67 +73,41 @@
   }
 
   /* Lenis smooth scroll */
-  html.lenis, html.lenis body {
-    height: auto;
-  }
-
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 
-  /* Clip-path reveal utility */
-  .clip-reveal {
-    clip-path: inset(0 0 100% 0);
+  /* Email underline animation — neutral white */
+  .underline-hover-effect {
+    @apply relative inline-block;
   }
-
-  .clip-visible {
-    clip-path: inset(0 0 0% 0);
-  }
-
-  /* Noise texture overlay */
-  .noise::after {
+  .underline-hover-effect::after {
     content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    @apply absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-500 ease-out;
+  }
+  .underline-hover-effect:hover::after {
+    @apply w-full;
   }
 
-  /* Glow effects */
-  .glow-blue {
-    box-shadow: 0 0 30px rgba(96, 165, 250, 0.12), 0 0 60px rgba(96, 165, 250, 0.05);
+  /* ── Infinite horizontal marquee ── */
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
+  .animate-marquee        { animation: marquee 28s linear infinite; will-change: transform; }
+  .animate-marquee-slow   { animation: marquee 45s linear infinite; will-change: transform; }
+  .animate-marquee-reverse { animation: marquee 28s linear infinite reverse; will-change: transform; }
 
-  .border-dim {
-    border-color: rgba(255, 255, 255, 0.08);
-  }
-
-  /* Gradient text */
-  .gradient-text {
-    background: linear-gradient(135deg, #FAFAFA 0%, #A1A1AA 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Section padding */
-  .section-padding {
-    @apply py-32 md:py-48;
-  }
+  /* Audio Wave Visualizer */
+  @keyframes audioBar1 { 0%, 100% { y2: 6; } 50% { y2: 15; } }
+  @keyframes audioBar2 { 0%, 100% { y2: 12; } 50% { y2: 6; } }
+  @keyframes audioBar3 { 0%, 100% { y2: 8; } 50% { y2: 16; } }
+  .animate-audio-bar-1 { animation: audioBar1 0.8s ease-in-out infinite; }
+  .animate-audio-bar-2 { animation: audioBar2 0.6s ease-in-out infinite; }
+  .animate-audio-bar-3 { animation: audioBar3 0.7s ease-in-out infinite; }
 }
