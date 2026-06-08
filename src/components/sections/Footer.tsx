@@ -136,7 +136,7 @@ export default function Footer() {
               DESIGNED &amp; BUILT BY SAURAV PUNJABI
             </span>
             <span className="font-mono text-xs text-zinc-700">
-              © 2025 · ALL RIGHTS RESERVED
+              © 2026 · ALL RIGHTS RESERVED
             </span>
           </div>
         </div>

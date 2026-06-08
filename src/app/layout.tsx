@@ -40,7 +40,7 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-[#09090B] text-[#FAFAFA] antialiased overflow-x-hidden">
+      <body className="bg-[#09090B] text-[#FAFAFA] antialiased overflow-x-hidden relative">
         <LenisProvider>
           <CustomCursor />
           <Navbar />

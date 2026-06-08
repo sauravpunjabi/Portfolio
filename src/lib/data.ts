@@ -200,7 +200,7 @@ export const experience = [
     id: "siddesh",
     company: "Siddesh Technologies",
     role: "Frontend-Focused Fullstack Developer Intern",
-    period: "Feb 2025 – Present",
+    period: "Feb 2026 – Present",
     location: "Pune, India",
     type: "Full-time Internship",
     current: true,

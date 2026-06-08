@@ -164,7 +164,7 @@ export default function Hero() {
       >
         <div className="flex items-center justify-between border-t border-white/[0.06] pt-6">
           <span className="font-mono text-xs text-zinc-600 tracking-wider">
-            SAURAV PUNJABI — 2025
+            SAURAV PUNJABI — 2026
           </span>
           <span className="font-mono text-xs text-zinc-600 tracking-wider">
             PUNE, INDIA
