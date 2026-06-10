@@ -2,7 +2,26 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:www.aboutluca.com)",
-      "Read(//c/Users/saura/.claude/projects/c--Users-saura-OneDrive-Desktop-codes-Portfolio-v2/memory/**)"
+      "Read(//c/Users/saura/.claude/projects/c--Users-saura-OneDrive-Desktop-codes-Portfolio-v2/memory/**)",
+      "WebFetch(domain:aboutluca.com)",
+      "WebFetch(domain:www.awwwards.com)",
+      "WebFetch(domain:tympanus.net)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('three'\\); console.log\\('three ok'\\)\")",
+      "Bash(powershell -Command \"\\(Get-Content src/components/sections/Hero.tsx\\) -replace '#212529', '#0b0b0d' | Set-Content src/components/sections/Hero.tsx; \\(Get-Content src/components/sections/About.tsx\\) -replace 'backgroundColor: \\\\\"#212529\\\\\"', 'backgroundColor: \\\\\"#0b0b0d\\\\\"' | Set-Content src/components/sections/About.tsx; \\(Get-Content src/components/sections/Work.tsx\\) -replace 'backgroundColor: \\\\\"#212529\\\\\"', 'backgroundColor: \\\\\"#0b0b0d\\\\\"' | Set-Content src/components/sections/Work.tsx; \\(Get-Content src/components/sections/Contact.tsx\\) -replace 'backgroundColor: \\\\\"#212529\\\\\"', 'backgroundColor: \\\\\"#0b0b0d\\\\\"' | Set-Content src/components/sections/Contact.tsx; \\(Get-Content src/components/sections/Timeline.tsx\\) -replace 'backgroundColor: \\\\\"#212529\\\\\"', 'backgroundColor: \\\\\"#0b0b0d\\\\\"' | Set-Content src/components/sections/Timeline.tsx\")",
+      "WebSearch",
+      "WebFetch(domain:discourse.threejs.org)",
+      "WebFetch(domain:me.muz.li)",
+      "WebFetch(domain:www.cssdesignawards.com)",
+      "Read(//c/Users/saura/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/**)",
+      "Bash(python scripts/search.py \"cinematic portfolio dark minimal developer creative\" --design-system -p \"Saurav Portfolio V2\" -f markdown)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\saura\\.claude\\projects\\c--Users-saura-OneDrive-Desktop-codes-Portfolio-v2\\memory"
     ]
   }
 }

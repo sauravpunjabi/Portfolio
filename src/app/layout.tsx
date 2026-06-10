@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import Navbar from "@/components/core/Navbar";
-import LenisProvider from "@/components/core/LenisProvider";
-import AudioToggle from "@/components/core/AudioToggle";
-import CustomCursor from "@/components/core/CustomCursor";
-import ScrollIndicator from "@/components/core/ScrollIndicator";
+import Cursor from "@/story/Cursor";
 
-const monoFont = IBM_Plex_Mono({
+const displayFont = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  axes: ["wdth"],
+  display: "swap",
+});
+
+const monoFont = JetBrains_Mono({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
   variable: "--font-mono",
@@ -17,7 +20,7 @@ const monoFont = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Saurav Punjabi — Frontend-Focused Fullstack Developer",
   description:
-    "I build digital products that balance engineering precision with human-centered design. Frontend-focused fullstack developer based in Pune, India.",
+    "A portfolio told as a story. I build digital products that balance engineering precision with human-centered design. Frontend-focused fullstack developer based in Pune, India.",
   keywords: [
     "Saurav Punjabi",
     "Frontend Developer",
@@ -25,6 +28,7 @@ export const metadata: Metadata = {
     "React",
     "Next.js",
     "TypeScript",
+    "Three.js",
     "Pune",
     "India",
   ],
@@ -32,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Saurav Punjabi — Frontend-Focused Fullstack Developer",
     description:
-      "I build digital products that balance engineering precision with human-centered design.",
+      "A portfolio told as a story — WebGL, GSAP, and engineering precision.",
     type: "website",
   },
 };
@@ -43,15 +47,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={monoFont.variable}>
-      <body className="bg-themeBg text-themeText antialiased overflow-x-hidden relative">
-        <LenisProvider>
-          <CustomCursor />
-          <ScrollIndicator />
-          <AudioToggle />
-          <Navbar />
-          <main>{children}</main>
-        </LenisProvider>
+    <html lang="en" className={`${monoFont.variable} ${displayFont.variable}`}>
+      <body className="antialiased overflow-x-hidden relative">
+        <main>{children}</main>
+        <Cursor />
       </body>
     </html>
   );

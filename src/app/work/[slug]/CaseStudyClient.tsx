@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { EASE_OUT_EXPO } from "@/lib/animations";
+import { gsap } from "@/lib/gsap";
 import { FadeUp } from "@/components/core/TextReveal";
-import MagneticButton from "@/components/core/MagneticButton";
 import { projects, type Project } from "@/lib/data";
 
 interface CaseStudyClientProps {
@@ -15,8 +15,11 @@ function SectionLabel({ label }: { label: string }) {
   return (
     <FadeUp>
       <div className="flex items-center gap-3 mb-6">
-        <span className="block w-6 h-px bg-[#495057]" />
-        <span className="font-mono text-[10px] text-[#6c757d] tracking-[0.2em] uppercase">
+        <span className="block w-6 h-px" style={{ backgroundColor: "var(--line)" }} />
+        <span
+          className="font-mono uppercase"
+          style={{ fontSize: "10px", letterSpacing: "0.2em", color: "var(--signal)" }}
+        >
           {label}
         </span>
       </div>
@@ -25,111 +28,265 @@ function SectionLabel({ label }: { label: string }) {
 }
 
 function Divider() {
-  return <div className="h-px bg-[#495057]/40 my-16 md:my-24" />;
+  return (
+    <div
+      className="my-16 md:my-24"
+      style={{ height: "1px", backgroundColor: "var(--line)" }}
+    />
+  );
 }
 
 export default function CaseStudyClient({ project }: CaseStudyClientProps) {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const otherProjects = projects.filter((p) => p.id !== project.id);
 
-  return (
-    <div className="min-h-screen bg-[#212529] text-[#ffffff] font-mono selection:bg-accent selection:text-[#ffffff]">
-      {/* Back button link */}
-      <div className="fixed top-8 left-6 md:left-12 z-40">
-        <MagneticButton
-          href="/"
-          className="flex items-center gap-2 text-[#6c757d] hover:text-[#ffffff] transition-colors duration-150 text-xs font-bold font-mono tracking-wider uppercase border border-[#495057] bg-[#000000] px-5 py-2.5 rounded-[2em]"
-          as="a"
-        >
-          <span>←</span>
-          <span>Back</span>
-        </MagneticButton>
-      </div>
+  const handleBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      window.history.back();
+    } else {
+      router.push("/");
+    }
+  };
 
-      {/* Hero Header */}
-      <div className="relative min-h-[50vh] md:min-h-[60vh] flex flex-col justify-end overflow-hidden pb-12 pt-36">
-        {/* Giant background typography watermark */}
-        <div className="absolute inset-0 flex items-center justify-center overflow-hidden z-0 pointer-events-none select-none">
-          <span className="font-mono text-[16vw] font-bold text-[#ffffff]/[0.012] leading-none whitespace-nowrap uppercase">
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.1 });
+      tl.fromTo(
+        ".cs-meta",
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+      )
+        .fromTo(
+          ".cs-title",
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 0.9, ease: "power4.out" },
+          "-=0.3"
+        )
+        .fromTo(
+          ".cs-subtitle",
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 0.9, ease: "power4.out" },
+          "-=0.6"
+        )
+        .fromTo(
+          ".cs-links",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5 },
+          "-=0.4"
+        );
+    }, headerRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div style={{ backgroundColor: "var(--ink)", color: "var(--bone)", minHeight: "100vh" }}>
+
+      {/* Fixed nav — matches story nav style */}
+      <nav
+        aria-label="Case study navigation"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 90,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "20px var(--gutter)",
+          mixBlendMode: "difference",
+        }}
+      >
+        <Link
+          href="/"
+          className="font-mono font-bold"
+          style={{ fontSize: "12px", letterSpacing: "0.1em", color: "var(--bone)" }}
+          data-hover
+        >
+          S—P<span style={{ color: "var(--signal)" }}>/</span>26
+        </Link>
+        <button
+          onClick={handleBack}
+          className="font-mono uppercase"
+          style={{
+            fontSize: "11px",
+            letterSpacing: "0.15em",
+            color: "var(--bone-dim)",
+            transition: "color 0.25s",
+          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "var(--bone)")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "var(--bone-dim)")}
+          data-hover
+        >
+          ← Back
+        </button>
+      </nav>
+
+      {/* Hero */}
+      <div
+        ref={headerRef}
+        className="relative overflow-hidden pb-16 pt-36"
+        style={{ minHeight: "60vh", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}
+      >
+        {/* Outlined ghost watermark */}
+        <div
+          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none"
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 800,
+              fontStretch: "115%",
+              fontSize: "20vw",
+              lineHeight: 0.85,
+              letterSpacing: "-0.02em",
+              textTransform: "uppercase",
+              color: "transparent",
+              WebkitTextStroke: "1px var(--line)",
+            }}
+          >
             {project.title}
           </span>
         </div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-8 w-full">
-          {/* Category & Year */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-            className="flex items-center gap-3 mb-4"
-          >
-            <span className="font-mono text-[10px] text-[#6c757d] bg-[#000000] border border-[#495057] px-3.5 py-1.5 rounded-[2em] uppercase tracking-wider">
+          {/* Category + year */}
+          <div className="cs-meta flex items-center gap-4 mb-6" style={{ opacity: 0 }}>
+            <span
+              className="font-mono uppercase"
+              style={{
+                fontSize: "10px",
+                letterSpacing: "0.2em",
+                color: "var(--signal)",
+                border: "1px solid var(--line)",
+                padding: "6px 14px",
+              }}
+            >
               {project.category}
             </span>
-            <span className="font-mono text-xs text-[#6c757d] font-bold">{project.year}</span>
-          </motion.div>
+            <span
+              className="font-mono"
+              style={{ fontSize: "11px", color: "var(--bone-dim)" }}
+            >
+              {project.year}
+            </span>
+          </div>
 
           {/* Title */}
           <div className="overflow-hidden mb-2">
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: 0.1 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#ffffff] leading-[0.95] uppercase"
+            <h1
+              className="cs-title uppercase"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 800,
+                fontStretch: "115%",
+                fontSize: "clamp(2.5rem, 9vw, 7rem)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.02em",
+                color: "var(--bone)",
+                transform: "translateY(100%)",
+                opacity: 0,
+              }}
             >
               {project.title}
-            </motion.h1>
+            </h1>
           </div>
-          <div className="overflow-hidden mb-8">
-            <motion.p
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: "0%", opacity: 1 }}
-              transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: 0.15 }}
-              className="text-lg md:text-xl text-[#6c757d] lowercase font-normal"
+          <div className="overflow-hidden mb-10">
+            <p
+              className="cs-subtitle font-mono lowercase"
+              style={{
+                fontSize: "clamp(0.85rem, 1.6vw, 1.1rem)",
+                color: "var(--bone-dim)",
+                transform: "translateY(100%)",
+                opacity: 0,
+              }}
             >
               {project.subtitle}
-            </motion.p>
+            </p>
           </div>
 
-          {/* Links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex items-center gap-4 flex-wrap"
-          >
+          {/* CTA links */}
+          <div className="cs-links flex items-center gap-4 flex-wrap" style={{ opacity: 0 }}>
             <a
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 rounded-[2em] border border-[#495057] text-[#ffffff] text-xs font-bold uppercase tracking-wider bg-[#000000] hover:border-[#ffffff] transition-colors duration-200"
+              className="font-mono uppercase"
+              style={{
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                padding: "10px 20px",
+                border: "1px solid var(--line)",
+                color: "var(--bone)",
+                transition: "border-color 0.25s, color 0.25s",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.borderColor = "var(--bone)";
+                el.style.color = "var(--signal)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.borderColor = "var(--line)";
+                el.style.color = "var(--bone)";
+              }}
+              data-hover
+              data-cursor="GitHub"
             >
-              <span>[github]</span>
-              <span>↗</span>
+              [github] ↗
             </a>
+
             {project.demo && (
               <a
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 rounded-[2em] bg-accent text-[#ffffff] text-xs font-bold uppercase tracking-wider hover:bg-[#8b5cf6] transition-colors duration-200"
+                className="font-mono uppercase"
+                style={{
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  padding: "10px 20px",
+                  border: "1px solid var(--bone)",
+                  backgroundColor: "var(--bone)",
+                  color: "var(--ink)",
+                  transition: "background-color 0.25s, color 0.25s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.backgroundColor = "transparent";
+                  el.style.color = "var(--bone)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.backgroundColor = "var(--bone)";
+                  el.style.color = "var(--ink)";
+                }}
+                data-hover
+                data-cursor="Live"
               >
-                <span>Live Demo</span>
-                <span>↗</span>
+                Live Demo ↗
               </a>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Main Content Sections */}
+      {/* Body content */}
       <div className="max-w-7xl mx-auto px-8 pb-32 relative z-10">
-        {/* Tags list */}
+
+        {/* Tags */}
         <FadeUp className="flex flex-wrap gap-2 mb-12">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[10px] text-[#6c757d] bg-[#000000] border border-[#495057] px-3.5 py-1.5 rounded-[2em]"
+              className="font-mono"
+              style={{
+                fontSize: "10px",
+                color: "var(--bone-dim)",
+                border: "1px solid var(--line)",
+                padding: "6px 14px",
+              }}
             >
               {tag}
             </span>
@@ -138,28 +295,44 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
 
         <Divider />
 
-        {/* Overview grid */}
+        {/* Overview + Outcomes */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
           <div>
             <SectionLabel label="Overview" />
             <FadeUp delay={0.1}>
-              <p className="text-[#6c757d] text-sm md:text-base leading-relaxed max-w-xl">
+              <p
+                className="font-mono leading-relaxed"
+                style={{ fontSize: "13px", color: "var(--bone-dim)", maxWidth: "36rem" }}
+              >
                 {project.longDescription}
               </p>
             </FadeUp>
           </div>
 
-          {/* Outcomes list */}
           <div>
             <SectionLabel label="Key Outcomes" />
-            <div className="space-y-4">
+            <div className="space-y-3">
               {project.outcomes.map((outcome, i) => (
                 <FadeUp key={i} delay={0.1 + i * 0.05}>
-                  <div className="flex items-start gap-4 p-6 rounded-[2em] border border-[#495057] bg-[#000000] shadow-sm">
-                    <span className="font-mono text-accent text-xs font-bold shrink-0 mt-0.5">
+                  <div
+                    className="flex items-start gap-4 p-5"
+                    style={{
+                      border: "1px solid var(--line)",
+                      backgroundColor: "var(--ink-2)",
+                    }}
+                  >
+                    <span
+                      className="font-mono shrink-0"
+                      style={{ fontSize: "11px", color: "var(--signal)", marginTop: "1px" }}
+                    >
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <p className="text-[#ffffff]/90 text-xs md:text-sm leading-relaxed">{outcome}</p>
+                    <p
+                      className="font-mono leading-relaxed"
+                      style={{ fontSize: "12px", color: "var(--bone)" }}
+                    >
+                      {outcome}
+                    </p>
                   </div>
                 </FadeUp>
               ))}
@@ -169,55 +342,82 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
 
         <Divider />
 
-        {/* Problem & Solution block */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <FadeUp>
-            <div className="p-8 rounded-[2em] border border-[#495057] bg-[#000000] h-full flex flex-col justify-between">
-              <div>
+        {/* Problem + Solution */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          {[
+            { dot: "#dc3545", label: "The Problem", text: project.problem },
+            { dot: "#198754", label: "The Solution", text: project.solution },
+          ].map(({ dot, label, text }, i) => (
+            <FadeUp key={label} delay={i * 0.1}>
+              <div
+                className="p-8 h-full flex flex-col"
+                style={{
+                  border: "1px solid var(--line)",
+                  backgroundColor: "var(--ink-2)",
+                }}
+              >
                 <div className="flex items-center gap-2 mb-6">
-                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
-                  <span className="font-mono text-[10px] text-[#6c757d] tracking-widest uppercase">
-                    The Problem
+                  <span
+                    style={{ width: 6, height: 6, backgroundColor: dot, display: "inline-block", flexShrink: 0 }}
+                  />
+                  <span
+                    className="font-mono uppercase"
+                    style={{ fontSize: "10px", letterSpacing: "0.25em", color: "var(--bone-dim)" }}
+                  >
+                    {label}
                   </span>
                 </div>
-                <p className="text-[#6c757d] text-xs md:text-sm leading-relaxed">{project.problem}</p>
+                <p
+                  className="font-mono leading-relaxed"
+                  style={{ fontSize: "12px", color: "var(--bone-dim)" }}
+                >
+                  {text}
+                </p>
               </div>
-            </div>
-          </FadeUp>
-
-          <FadeUp delay={0.1}>
-            <div className="p-8 rounded-[2em] border border-[#495057] bg-[#000000] h-full flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                  <span className="font-mono text-[10px] text-[#6c757d] tracking-widest uppercase">
-                    The Solution
-                  </span>
-                </div>
-                <p className="text-[#ffffff]/90 text-xs md:text-sm leading-relaxed">{project.solution}</p>
-              </div>
-            </div>
-          </FadeUp>
+            </FadeUp>
+          ))}
         </div>
 
         <Divider />
 
-        {/* Architecture grid */}
+        {/* Architecture */}
         <div className="mb-16">
           <SectionLabel label="Technical Architecture" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {project.architecture.map((item, i) => (
               <FadeUp key={item.title} delay={i * 0.05}>
-                <div className="p-6 rounded-[2em] border border-[#495057] bg-[#000000] group hover:border-[#ffffff] transition-all duration-200">
+                <div
+                  className="p-6"
+                  style={{
+                    border: "1px solid var(--line)",
+                    backgroundColor: "var(--ink-2)",
+                    transition: "border-color 0.25s",
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--bone-dim)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--line)")
+                  }
+                >
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="font-mono text-accent text-xs font-bold">
+                    <span
+                      className="font-mono"
+                      style={{ fontSize: "11px", color: "var(--signal)" }}
+                    >
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h4 className="font-bold text-sm text-[#ffffff] uppercase tracking-wider">
+                    <h4
+                      className="font-mono font-bold uppercase"
+                      style={{ fontSize: "11px", letterSpacing: "0.12em", color: "var(--bone)" }}
+                    >
                       {item.title}
                     </h4>
                   </div>
-                  <p className="text-[#6c757d] text-xs leading-relaxed group-hover:text-[#ffffff]/90 transition-colors">
+                  <p
+                    className="font-mono leading-relaxed"
+                    style={{ fontSize: "11px", color: "var(--bone-dim)" }}
+                  >
                     {item.description}
                   </p>
                 </div>
@@ -228,20 +428,39 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
 
         <Divider />
 
-        {/* Engineering Challenges */}
+        {/* Challenges */}
         <div className="mb-16">
           <SectionLabel label="Engineering Challenges" />
-          <div className="space-y-4">
-            {project.challenges.map((challenge, i) => (
-              <FadeUp key={challenge.title} delay={i * 0.05}>
-                <div className="flex flex-col md:flex-row gap-6 p-8 rounded-[2em] border border-[#495057] bg-[#000000] group hover:border-[#ffffff] transition-all duration-200">
-                  <div className="md:w-72 shrink-0">
-                    <h4 className="font-bold text-sm text-[#ffffff] uppercase tracking-wider">
-                      {challenge.title}
+          <div className="space-y-3">
+            {project.challenges.map((ch, i) => (
+              <FadeUp key={ch.title} delay={i * 0.05}>
+                <div
+                  className="flex flex-col md:flex-row gap-6 p-8"
+                  style={{
+                    border: "1px solid var(--line)",
+                    backgroundColor: "var(--ink-2)",
+                    transition: "border-color 0.25s",
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--bone-dim)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--line)")
+                  }
+                >
+                  <div className="md:w-56 shrink-0">
+                    <h4
+                      className="font-mono font-bold uppercase"
+                      style={{ fontSize: "11px", letterSpacing: "0.1em", color: "var(--bone)" }}
+                    >
+                      {ch.title}
                     </h4>
                   </div>
-                  <p className="text-[#6c757d] text-xs md:text-sm leading-relaxed group-hover:text-[#ffffff]/90 transition-colors">
-                    {challenge.description}
+                  <p
+                    className="font-mono leading-relaxed"
+                    style={{ fontSize: "12px", color: "var(--bone-dim)" }}
+                  >
+                    {ch.description}
                   </p>
                 </div>
               </FadeUp>
@@ -251,24 +470,55 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
 
         <Divider />
 
-        {/* More Work Navigator */}
+        {/* More Work */}
         <div>
           <SectionLabel label="More Work" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {otherProjects.map((p, i) => (
               <FadeUp key={p.id} delay={i * 0.05}>
-                <Link href={`/work/${p.id}`} className="block group">
-                  <div className="p-6 rounded-[2em] border border-[#495057] bg-[#000000] hover:border-[#ffffff] transition-all duration-200">
+                <Link href={`/work/${p.id}`} className="block" data-hover>
+                  <div
+                    className="p-6"
+                    style={{
+                      border: "1px solid var(--line)",
+                      backgroundColor: "var(--ink-2)",
+                      transition: "border-color 0.25s",
+                    }}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--bone-dim)")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--line)")
+                    }
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <span className="font-mono text-[9px] text-[#6c757d] uppercase tracking-widest">{p.category}</span>
-                      <span className="text-[#6c757d] group-hover:text-[#ffffff] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-150">
-                        ↗
+                      <span
+                        className="font-mono uppercase"
+                        style={{ fontSize: "9px", letterSpacing: "0.3em", color: "var(--signal)" }}
+                      >
+                        {p.category}
                       </span>
+                      <span style={{ color: "var(--bone-dim)" }}>↗</span>
                     </div>
-                    <h4 className="text-lg font-bold text-[#ffffff] group-hover:text-accent transition-colors uppercase">
+                    <h4
+                      className="uppercase"
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 800,
+                        fontStretch: "110%",
+                        fontSize: "clamp(18px, 2.4vw, 28px)",
+                        letterSpacing: "-0.01em",
+                        color: "var(--bone)",
+                      }}
+                    >
                       {p.title}
                     </h4>
-                    <p className="text-[#6c757d] text-xs lowercase mt-1">{p.subtitle}</p>
+                    <p
+                      className="font-mono lowercase mt-1"
+                      style={{ fontSize: "11px", color: "var(--bone-dim)" }}
+                    >
+                      {p.subtitle}
+                    </p>
                   </div>
                 </Link>
               </FadeUp>

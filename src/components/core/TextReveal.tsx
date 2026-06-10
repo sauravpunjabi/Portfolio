@@ -1,110 +1,87 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import { motion, useInView } from "framer-motion";
-import { lineReveal, EASE_OUT_EXPO } from "@/lib/animations";
+import { useEffect, useRef, type ReactNode } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
-interface TextRevealProps {
+interface FadeUpProps {
   children: ReactNode;
   className?: string;
   delay?: number;
-  once?: boolean;
-  as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
 }
 
+export function FadeUp({ children, className = "", delay = 0 }: FadeUpProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          delay,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+    });
+    return () => ctx.revert();
+  }, [delay]);
+
+  return (
+    <div ref={ref} className={className} style={{ opacity: 0 }}>
+      {children}
+    </div>
+  );
+}
+
+// Line reveal — wraps content in overflow-hidden + slides up
 export function TextRevealLine({
   children,
   className = "",
   delay = 0,
-  once = true,
-}: TextRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-5% 0px" });
+}: FadeUpProps) {
+  const innerRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.div
-        variants={lineReveal}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        transition={{
+  useEffect(() => {
+    const el = innerRef.current;
+    const wrap = wrapRef.current;
+    if (!el || !wrap) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { y: "100%" },
+        {
+          y: "0%",
           duration: 0.9,
-          ease: EASE_OUT_EXPO,
+          ease: "power4.out",
           delay,
-        }}
-      >
+          scrollTrigger: {
+            trigger: wrap,
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+    });
+    return () => ctx.revert();
+  }, [delay]);
+
+  return (
+    <div ref={wrapRef} className={`overflow-hidden ${className}`}>
+      <div ref={innerRef} style={{ transform: "translateY(100%)" }}>
         {children}
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-interface SplitTextRevealProps {
-  text: string;
-  className?: string;
-  wrapperClassName?: string;
-  delay?: number;
-  once?: boolean;
-  stagger?: number;
-}
-
-export function SplitTextReveal({
-  text,
-  className = "",
-  wrapperClassName = "",
-  delay = 0,
-  once = true,
-  stagger = 0.08,
-}: SplitTextRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-5% 0px" });
-
-  const lines = text.split("\n");
-
-  return (
-    <div ref={ref} className={wrapperClassName}>
-      {lines.map((line, i) => (
-        <div key={i} className="overflow-hidden">
-          <motion.div
-            className={className}
-            initial={{ y: "100%", opacity: 0 }}
-            animate={
-              isInView
-                ? { y: "0%", opacity: 1 }
-                : { y: "100%", opacity: 0 }
-            }
-            transition={{
-              duration: 0.9,
-              ease: EASE_OUT_EXPO,
-              delay: delay + i * stagger,
-            }}
-          >
-            {line}
-          </motion.div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function FadeUp({
-  children,
-  className = "",
-  delay = 0,
-  once = true,
-}: TextRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-5% 0px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
