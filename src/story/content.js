@@ -17,24 +17,31 @@ export const STATEMENT =
 
 export const PROJECTS = [
   {
-    title: "J.A.R.V.I.S",
-    category: "AI Voice Assistant",
-    tech: "Python · Gemini · Whisper",
-    year: "2026",
-    url: "/work/jarvis",
+    title: "F1Pulse",
+    category: "Cinematic F1 Platform",
+    tech: "Next.js · Three.js · Redis",
+    year: "2026 – Present",
+    url: "/work/f1pulse",
   },
   {
     title: "AutoServe",
     category: "Vehicle Service SaaS",
     tech: "React · Node · PostgreSQL",
-    year: "Ongoing",
+    year: "2026",
     url: "/work/autoserve",
+  },
+  {
+    title: "J.A.R.V.I.S",
+    category: "AI Voice Assistant",
+    tech: "Python · Gemini · Whisper",
+    year: "2026 – Present",
+    url: "/work/jarvis",
   },
   {
     title: "Questro",
     category: "AI Interview Prep",
     tech: "Next.js · Firebase · Gemini",
-    year: "2026",
+    year: "2025",
     url: "/work/questro",
   },
 ];

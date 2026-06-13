@@ -69,8 +69,15 @@ export default function Story({ entered }) {
     return () => ctx.revert();
   }, [entered]);
 
-  // the master scrub: one pinned stage, nine cinematic beats
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+    if (typeof ScrollTrigger !== "undefined") {
+      ScrollTrigger.clearScrollMemory();
+    }
+
     const ctx = gsap.context(() => {
       const frames = gsap.utils.toArray(".frame");
       const N = frames.length;

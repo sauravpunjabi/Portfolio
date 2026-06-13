@@ -20,68 +20,68 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: "jarvis",
-    title: "J.A.R.V.I.S",
-    subtitle: "AI Voice Assistant",
-    year: "2025",
-    category: "AI / Machine Learning",
+    id: "f1pulse",
+    title: "F1Pulse",
+    subtitle: "Cinematic F1 Platform",
+    year: "2026 – Present",
+    category: "Fullstack / 3D Web",
     description:
-      "A fully local, Iron Man-inspired AI voice assistant with wake word detection, deep PC integration, and zero cloud dependency.",
+      "A full-stack Formula 1 archive serving live 2026 season data and 76 seasons of history through a cinematic experience.",
     longDescription:
-      "J.A.R.V.I.S is a locally-running AI assistant that combines wake word detection, speech-to-text, a Gemini-powered conversational brain, and neural text-to-speech into a seamless, always-on desktop experience — built from scratch with privacy as a first principle.",
-    tags: ["Python", "Gemini 2.5 Flash", "OpenAI Whisper", "PyQt6", "Edge TTS", "openWakeWord"],
-    github: "https://github.com/sauravpunjabi/Jarvis",
+      "F1Pulse is a cinematic, full-stack Formula 1 archive that combines real-time WebSocket race tracking, a Redis-cached telemetry API, and interactive 3D circuit visualizations to deliver 76 seasons of history and live data in a unified digital experience.",
+    tags: ["Next.js 14", "TypeScript", "Node.js", "PostgreSQL", "Redis", "Prisma", "React Three Fiber", "GSAP"],
+    github: "https://github.com/sauravpunjabi/F1Pulse",
     demo: null,
     featured: true,
-    accentColor: "rgba(96, 165, 250, 0.12)",
+    accentColor: "rgba(220, 38, 38, 0.08)",
     problem:
-      "Existing voice assistants are cloud-dependent, privacy-invasive, and lack deep desktop integration. They're designed for smart speakers, not power users who want a truly intelligent PC companion.",
+      "Formula 1 has over 70 years of telemetry and race history, but it is scattered across various API endpoints with high latency, and there's no platform that presents this data as an interactive, highly engaging narrative.",
     solution:
-      "A modular, locally-run voice pipeline: wake word detection → Whisper speech-to-text → Gemini 2.5 Flash reasoning → Edge TTS output, packaged in a polished PyQt6 desktop GUI with persistent memory across sessions.",
+      "A normalized PostgreSQL database syncing Jolpica and OpenF1 APIs with Redis caching, and a GSAP and React Three Fiber frontend with 3D circuits to explore results dynamically.",
     architecture: [
       {
-        title: "Wake Word Detection",
-        description: "openWakeWord listens continuously for the trigger phrase with minimal CPU overhead, activating the pipeline only when needed.",
+        title: "Telemetry Pipeline",
+        description: "Normalised PostgreSQL via Prisma with BullMQ background jobs processing race data.",
       },
       {
-        title: "Speech-to-Text",
-        description: "OpenAI Whisper processes audio locally, providing accurate transcription without sending data to any external server.",
+        title: "WebSocket Live Layer",
+        description: "Broadcasting real-time driver coordinates and speed metrics using OpenF1.",
       },
       {
-        title: "AI Brain",
-        description: "Gemini 2.5 Flash acts as the reasoning engine with a custom JARVIS personality, persistent memory, and context awareness.",
+        title: "3D Visualizations",
+        description: "React Three Fiber rendering interactive 3D circuits with live position tracking.",
       },
       {
-        title: "Neural TTS",
-        description: "Edge TTS synthesizes natural-sounding voice responses, completing the conversational loop in under 2 seconds end-to-end.",
+        title: "Cinematic Motion",
+        description: "Scroll-driven choreography utilizing GSAP ScrollTrigger for decade-by-decade history transitions.",
       },
     ],
     challenges: [
       {
-        title: "Latency Optimization",
-        description: "Achieving sub-2s response times required careful pipeline orchestration — streaming audio capture, parallel processing, and pre-buffering TTS output.",
+        title: "API Latency & Caching",
+        description: "Integrating scattered third-party endpoints without slowing down page load times required a robust Redis layer.",
       },
       {
-        title: "Persistent Memory",
-        description: "Designing a memory system that persists conversation context across sessions without bloating the prompt required a structured summarization strategy.",
+        title: "3D Performance",
+        description: "Rendering high-fidelity racetrack curves dynamically on low-end devices was optimized using simplified spline curves.",
       },
       {
-        title: "Modular Skill System",
-        description: "Building a plugin-like skill system where each capability (PC control, web search, weather) is independently extensible without modifying the core pipeline.",
+        title: "Real-Time Syncing",
+        description: "Handling WebSockets broadcasts during peak race hours required a memory-efficient message broker.",
       },
     ],
     outcomes: [
-      "Sub-2 second end-to-end voice response latency",
-      "15+ modular skills including PC control, web search, and media playback",
-      "Zero cloud dependency — all processing runs locally",
-      "Persistent personality and conversation memory across sessions",
+      "Real-time circuit positions with sub-second WebSocket updates",
+      "Redis-cached REST API with BullMQ background jobs for race outcomes",
+      "76 seasons of Formula 1 driver and race telemetry database-driven",
+      "Decade-by-decade F1 History Mode with dynamic black-and-white to color transitions",
     ],
   },
   {
     id: "autoserve",
     title: "AutoServe",
     subtitle: "Vehicle Service SaaS",
-    year: "2025",
+    year: "2026",
     category: "SaaS / Fullstack",
     description:
       "A multi-tenant SaaS platform that digitizes the entire automobile service workflow — from booking to billing — with role-based access for customers, mechanics, and admins.",
@@ -136,6 +136,64 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "jarvis",
+    title: "J.A.R.V.I.S",
+    subtitle: "AI Voice Assistant",
+    year: "2026 – Present",
+    category: "AI / Machine Learning",
+    description:
+      "A fully local, Iron Man-inspired AI voice assistant with wake word detection, deep PC integration, and zero cloud dependency.",
+    longDescription:
+      "J.A.R.V.I.S is a locally-running AI assistant that combines wake word detection, speech-to-text, a Gemini-powered conversational brain, and neural text-to-speech into a seamless, always-on desktop experience — built from scratch with privacy as a first principle.",
+    tags: ["Python", "Gemini 2.5 Flash", "OpenAI Whisper", "PyQt6", "Edge TTS", "openWakeWord"],
+    github: "https://github.com/sauravpunjabi/Jarvis",
+    demo: null,
+    featured: true,
+    accentColor: "rgba(96, 165, 250, 0.12)",
+    problem:
+      "Existing voice assistants are cloud-dependent, privacy-invasive, and lack deep desktop integration. They're designed for smart speakers, not power users who want a truly intelligent PC companion.",
+    solution:
+      "A modular, locally-run voice pipeline: wake word detection → Whisper speech-to-text → Gemini 2.5 Flash reasoning → Edge TTS output, packaged in a polished PyQt6 desktop GUI with persistent memory across sessions.",
+    architecture: [
+      {
+        title: "Wake Word Detection",
+        description: "openWakeWord listens continuously for the trigger phrase with minimal CPU overhead, activating the pipeline only when needed.",
+      },
+      {
+        title: "Speech-to-Text",
+        description: "OpenAI Whisper processes audio locally, providing accurate transcription without sending data to any external server.",
+      },
+      {
+        title: "AI Brain",
+        description: "Gemini 2.5 Flash acts as the reasoning engine with a custom JARVIS personality, persistent memory, and context awareness.",
+      },
+      {
+        title: "Neural TTS",
+        description: "Edge TTS synthesizes natural-sounding voice responses, completing the conversational loop in under 2 seconds end-to-end.",
+      },
+    ],
+    challenges: [
+      {
+        title: "Latency Optimization",
+        description: "Achieving sub-2s response times required careful pipeline orchestration — streaming audio capture, parallel processing, and pre-buffering TTS output.",
+      },
+      {
+        title: "Persistent Memory",
+        description: "Designing a memory system that persists context without bloating the prompt required a structured summarization strategy.",
+      },
+      {
+        title: "Modular Skill System",
+        description: "Building a plugin-like skill system where each capability (PC control, web search, weather) is independently extensible without modifying the core pipeline.",
+      },
+    ],
+    outcomes: [
+      "Sub-2 second end-to-end voice response latency",
+      "15+ modular skills including PC control, web search, and media playback",
+      "Zero cloud dependency — all processing runs locally",
+      "Persistent personality and conversation memory across sessions",
+    ],
+  },
+  {
     id: "questro",
     title: "Questro",
     subtitle: "AI Interview Prep Bot",
@@ -147,7 +205,7 @@ export const projects: Project[] = [
       "Questro transforms passive interview prep into an active, personalized experience. Users configure their target role, stack, difficulty level, and question count — then enter a simulated interview session. Responses are analyzed by Gemini API and stored in Firebase for longitudinal progress tracking.",
     tags: ["Next.js", "TypeScript", "Firebase", "Gemini API", "Tailwind CSS"],
     github: "https://github.com/sauravpunjabi/Questro",
-    demo: null,
+    demo: "https://questro23.vercel.app",
     featured: true,
     accentColor: "rgba(167, 139, 250, 0.08)",
     problem:

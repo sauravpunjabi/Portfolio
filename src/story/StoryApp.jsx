@@ -46,25 +46,6 @@ export default function StoryApp() {
 
     const scrollToProject = sessionStorage.getItem("p-scroll-to");
     let scrolled = false;
-    if (scrollToProject) {
-      sessionStorage.removeItem("p-scroll-to");
-      const projIdx = PROJECTS.findIndex(p => p.url.endsWith(scrollToProject));
-      if (projIdx !== -1) {
-        const frameIdx = 3 + projIdx;
-        scrolled = true;
-        // Wait for ScrollTrigger / DOM to measure and scroll
-        setTimeout(() => {
-          const y = navBus.resolve?.(frameIdx);
-          if (y != null) {
-            lenis.scrollTo(y, { immediate: true, force: true });
-          }
-        }, 120);
-      }
-    }
-
-    if (!scrolled) {
-      lenis.scrollTo(0, { immediate: true, force: true });
-    }
 
     lenis.on("scroll", (e) => {
       ScrollTrigger.update();
@@ -79,7 +60,29 @@ export default function StoryApp() {
     if (skipLoader) {
       document.body.classList.remove("is-locked");
       sceneState.boot = 1;
-      setTimeout(() => ScrollTrigger.refresh(), 120);
+
+      if (scrollToProject) {
+        sessionStorage.removeItem("p-scroll-to");
+        const projIdx = PROJECTS.findIndex(p => p.url.endsWith(scrollToProject));
+        if (projIdx !== -1) {
+          const frameIdx = 3 + projIdx;
+          scrolled = true;
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+            const y = navBus.resolve?.(frameIdx);
+            if (y != null) {
+              lenis.scrollTo(y, { immediate: true, force: true });
+            }
+          }, 150);
+        }
+      }
+
+      if (!scrolled) {
+        lenis.scrollTo(0, { immediate: true, force: true });
+        setTimeout(() => ScrollTrigger.refresh(), 150);
+      }
+    } else {
+      lenis.scrollTo(0, { immediate: true, force: true });
     }
 
     return () => {
