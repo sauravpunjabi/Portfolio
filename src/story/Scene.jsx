@@ -83,7 +83,7 @@ function Dust({ count = 2200 }) {
       uVel: { value: 0 },
       uAgitation: { value: 0 },
       uMouse: { value: new THREE.Vector3(99, 99, 0) },
-      uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+      uPixelRatio: { value: typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1 },
       uColor: { value: new THREE.Color("#cfcbc2") },
       uAccentColor: { value: new THREE.Color("#ff4a1c") },
     }),

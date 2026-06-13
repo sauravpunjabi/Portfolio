@@ -14,6 +14,7 @@ export default function Cursor() {
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
     setEnabled(true);
+    document.documentElement.classList.add("has-cursor");
     document.body.classList.add("has-cursor");
 
     const mouse = { x: -100, y: -100 };
@@ -92,6 +93,7 @@ export default function Cursor() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
       cancelAnimationFrame(raf);
+      document.documentElement.classList.remove("has-cursor");
       document.body.classList.remove("has-cursor");
     };
   }, []);

@@ -32,9 +32,13 @@
   }
 
   /* custom cursor hides the native one on all elements */
-  body.has-cursor,
-  body.has-cursor * {
-    cursor: none !important;
+  @media (min-width: 769px) {
+    html.has-cursor,
+    html.has-cursor *,
+    body.has-cursor,
+    body.has-cursor * {
+      cursor: none !important;
+    }
   }
 
   html {
@@ -637,7 +641,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 999999;
   pointer-events: none;
   width: 0;
   height: 0;
@@ -683,7 +687,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 999999;
   pointer-events: none;
   width: 4px;
   height: 4px;
@@ -694,7 +698,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 999999;
   pointer-events: none;
   font-family: var(--font-mono), monospace;
   font-size: 10px;

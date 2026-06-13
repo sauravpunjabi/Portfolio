@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import Cursor from "@/story/Cursor";
+import GlobalCanvas from "@/components/webgl/GlobalCanvas";
 
 const displayFont = Archivo({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${monoFont.variable} ${displayFont.variable}`}>
       <body className="antialiased overflow-x-hidden relative">
+        <GlobalCanvas />
         <main>{children}</main>
         <Cursor />
       </body>

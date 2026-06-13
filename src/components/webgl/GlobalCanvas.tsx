@@ -2,11 +2,11 @@
 
 import dynamic from "next/dynamic";
 
-const WebGLParticles = dynamic(
-  () => import("./WebGLParticles"),
+const Scene = dynamic(
+  () => import("@/story/Scene"),
   { ssr: false }
 );
 
 export default function GlobalCanvas() {
-  return <WebGLParticles />;
+  return <Scene />;
 }

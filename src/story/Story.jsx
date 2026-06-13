@@ -103,18 +103,18 @@ export default function Story({ entered }) {
         },
       });
 
-      const enterChars = (f, at) =>
-        tl.to(
-          f.querySelectorAll(".ch"),
-          { yPercent: 0, duration: 0.38, ease: "power3.out", stagger: 0.012 },
-          at
-        );
-      const exitChars = (f, at) =>
-        tl.to(
-          f.querySelectorAll(".ch"),
-          { yPercent: -120, duration: 0.3, ease: "power2.in", stagger: 0.008 },
-          at
-        );
+      const enterChars = (f, at) => {
+        const targets = f.querySelectorAll(".ch");
+        if (targets.length > 0) {
+          tl.to(targets, { yPercent: 0, duration: 0.38, ease: "power3.out", stagger: 0.012 }, at);
+        }
+      };
+      const exitChars = (f, at) => {
+        const targets = f.querySelectorAll(".ch");
+        if (targets.length > 0) {
+          tl.to(targets, { yPercent: -120, duration: 0.3, ease: "power2.in", stagger: 0.008 }, at);
+        }
+      };
       const enterMeta = (f, at) => {
         const metas = f.querySelectorAll(".frame__meta");
         if (metas.length) {
@@ -194,6 +194,9 @@ export default function Story({ entered }) {
 
       // chapter jumps for the nav
       navBus.resolve = (key) => {
+        if (typeof key === "number") {
+          return tl.scrollTrigger.labelToScroll(`f${key}`);
+        }
         const idx = CHAPTER_LABELS[key];
         return idx == null ? 0 : tl.scrollTrigger.labelToScroll(`f${idx}`);
       };

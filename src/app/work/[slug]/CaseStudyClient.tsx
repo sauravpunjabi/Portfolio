@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { FadeUp } from "@/components/core/TextReveal";
 import { projects, type Project } from "@/lib/data";
+import { sceneState } from "@/story/store";
+import Lenis from "lenis";
 
 interface CaseStudyClientProps {
   project: Project;
@@ -42,12 +44,38 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
   const otherProjects = projects.filter((p) => p.id !== project.id);
 
   const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      window.history.back();
-    } else {
-      router.push("/");
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("p-scroll-to", project.id);
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        router.push("/");
+      }
     }
   };
+
+  useEffect(() => {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
+    sceneState.boot = 1;
+
+    const lenis = new Lenis({ lerp: 0.085 });
+
+    lenis.on("scroll", (e: any) => {
+      ScrollTrigger.update();
+      sceneState.velocity = Math.max(-1, Math.min(1, e.velocity / 60));
+    });
+
+    const raf = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(raf);
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -80,7 +108,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "var(--ink)", color: "var(--bone)", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "transparent", color: "var(--bone)", minHeight: "100vh" }}>
 
       {/* Fixed nav — matches story nav style */}
       <nav
@@ -103,6 +131,11 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
           className="font-mono font-bold"
           style={{ fontSize: "12px", letterSpacing: "0.1em", color: "var(--bone)" }}
           data-hover
+          onClick={() => {
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("p-scroll-to", project.id);
+            }
+          }}
         >
           S—P<span style={{ color: "var(--signal)" }}>/</span>26
         </Link>
@@ -283,7 +316,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
               className="font-mono"
               style={{
                 fontSize: "10px",
-                color: "var(--bone-dim)",
+                color: "var(--bone)",
                 border: "1px solid var(--line)",
                 padding: "6px 14px",
               }}
@@ -302,7 +335,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
             <FadeUp delay={0.1}>
               <p
                 className="font-mono leading-relaxed"
-                style={{ fontSize: "13px", color: "var(--bone-dim)", maxWidth: "36rem" }}
+                style={{ fontSize: "13px", color: "#c4c0b7", maxWidth: "36rem" }}
               >
                 {project.longDescription}
               </p>
@@ -369,7 +402,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
                 </div>
                 <p
                   className="font-mono leading-relaxed"
-                  style={{ fontSize: "12px", color: "var(--bone-dim)" }}
+                  style={{ fontSize: "12px", color: "#c4c0b7" }}
                 >
                   {text}
                 </p>
@@ -416,7 +449,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
                   </div>
                   <p
                     className="font-mono leading-relaxed"
-                    style={{ fontSize: "11px", color: "var(--bone-dim)" }}
+                    style={{ fontSize: "11px", color: "#c4c0b7" }}
                   >
                     {item.description}
                   </p>
@@ -458,7 +491,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
                   </div>
                   <p
                     className="font-mono leading-relaxed"
-                    style={{ fontSize: "12px", color: "var(--bone-dim)" }}
+                    style={{ fontSize: "12px", color: "#c4c0b7" }}
                   >
                     {ch.description}
                   </p>
