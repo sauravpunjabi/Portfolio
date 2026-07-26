@@ -55,6 +55,32 @@ function ProjectThumbnail({ projectId }: { projectId: string }) {
     );
   }
 
+  if (projectId === "f1-mcp") {
+    return (
+      <div className="w-full h-full bg-[#000000] border border-[#495057] p-4 flex flex-col justify-between font-mono text-[8px] text-orange-400 select-none">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(251,146,60,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(251,146,60,0.03)_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
+        <div className="flex justify-between items-center border-b border-orange-500/20 pb-1.5 z-10">
+          <span>MCP: 6 TOOLS</span>
+          <span>OAUTH: GITHUB</span>
+        </div>
+        <div className="flex-1 flex flex-col justify-center gap-1 z-10 py-1 text-[7px]">
+          <div className="border border-orange-500/10 p-1 bg-orange-500/5 flex justify-between">
+            <span>→ season_standing(2026)</span>
+            <span>200</span>
+          </div>
+          <div className="border border-orange-500/10 p-1 bg-orange-500/10 flex justify-between">
+            <span>bot&gt; Verstappen leads by 34</span>
+            <span>↩</span>
+          </div>
+        </div>
+        <div className="flex justify-between items-center border-t border-orange-500/20 pt-1.5 z-10 text-[7px] text-[#ffffff]/50">
+          <span>MODEL: llama3.1:8b</span>
+          <span>HOST: render</span>
+        </div>
+      </div>
+    );
+  }
+
   if (projectId === "autoserve") {
     return (
       <div className="w-full h-full bg-[#000000] border border-[#495057] p-4 flex flex-col justify-between font-mono text-[8px] text-emerald-400 select-none">

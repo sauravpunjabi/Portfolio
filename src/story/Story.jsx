@@ -18,11 +18,13 @@ const CHAPTER_LABELS = {
   contact: 5 + PROJECTS.length,
 };
 
+// .ch is inline-block, so a plain space collapses to zero width — spaces
+// must be non-breaking to survive the split
 const Chars = ({ text }) => (
   <>
     {text.split("").map((c, i) => (
       <span className="ch" key={i}>
-        {c === " " ? " " : c}
+        {c === " " ? " " : c}
       </span>
     ))}
   </>

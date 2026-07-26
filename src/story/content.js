@@ -1,7 +1,7 @@
 // ── Real resume data — single source of truth for the story ──────────
 export const PROFILE = {
   name: ["SAURAV", "PUNJABI"],
-  role: "Frontend-Focused Fullstack Developer",
+  role: "Fullstack Developer",
   location: "Pune, India",
   email: "sauravpunjabi123@gmail.com",
   phone: "+91-9511865602",
@@ -16,6 +16,13 @@ export const STATEMENT =
   "I build digital products that balance engineering precision with human-centered design — interfaces you can almost touch.";
 
 export const PROJECTS = [
+  {
+    title: "F1-MCP",
+    category: "MCP Server & Local LLM Client",
+    tech: "Python · FastMCP · Ollama",
+    year: "2026",
+    url: "/work/f1-mcp",
+  },
   {
     title: "F1Pulse",
     category: "Cinematic F1 Platform",
@@ -50,7 +57,7 @@ export const JOURNEY = [
   {
     n: "01",
     title: "Siddesh Technologies",
-    desc: "Frontend-Focused Fullstack Developer Intern — owning end-to-end UI for a client-facing web project. Feb 2026 — Present",
+    desc: "Fullstack Developer Intern — owned end-to-end UI for a client-facing web project. Feb 2026 — Jun 2026",
   },
   {
     n: "02",

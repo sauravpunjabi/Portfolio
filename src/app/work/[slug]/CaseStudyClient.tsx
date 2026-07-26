@@ -42,6 +42,7 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
   const headerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const otherProjects = projects.filter((p) => p.id !== project.id);
+  const repoLinks = project.repos ?? [{ label: "github", url: project.github }];
 
   const handleBack = () => {
     if (typeof window !== "undefined") {
@@ -241,34 +242,37 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
 
           {/* CTA links */}
           <div className="cs-links flex items-center gap-4 flex-wrap" style={{ opacity: 0 }}>
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono uppercase"
-              style={{
-                fontSize: "11px",
-                letterSpacing: "0.15em",
-                padding: "10px 20px",
-                border: "1px solid var(--line)",
-                color: "var(--bone)",
-                transition: "border-color 0.25s, color 0.25s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.borderColor = "var(--bone)";
-                el.style.color = "var(--signal)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.borderColor = "var(--line)";
-                el.style.color = "var(--bone)";
-              }}
-              data-hover
-              data-cursor="GitHub"
-            >
-              [github] ↗
-            </a>
+            {repoLinks.map((repo) => (
+              <a
+                key={repo.url}
+                href={repo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono uppercase"
+                style={{
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  padding: "10px 20px",
+                  border: "1px solid var(--line)",
+                  color: "var(--bone)",
+                  transition: "border-color 0.25s, color 0.25s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = "var(--bone)";
+                  el.style.color = "var(--signal)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = "var(--line)";
+                  el.style.color = "var(--bone)";
+                }}
+                data-hover
+                data-cursor="GitHub"
+              >
+                [{repo.label}] ↗
+              </a>
+            ))}
 
             {project.demo && (
               <a

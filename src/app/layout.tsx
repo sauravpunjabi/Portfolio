@@ -19,9 +19,9 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Saurav Punjabi — Frontend-Focused Fullstack Developer",
+  title: "Saurav Punjabi — Fullstack Developer",
   description:
-    "A portfolio told as a story. I build digital products that balance engineering precision with human-centered design. Frontend-focused fullstack developer based in Pune, India.",
+    "A portfolio told as a story. I build digital products that balance engineering precision with human-centered design. Fullstack developer based in Pune, India.",
   keywords: [
     "Saurav Punjabi",
     "Frontend Developer",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Saurav Punjabi", url: "https://github.com/sauravpunjabi" }],
   openGraph: {
-    title: "Saurav Punjabi — Frontend-Focused Fullstack Developer",
+    title: "Saurav Punjabi — Fullstack Developer",
     description:
       "A portfolio told as a story — WebGL, GSAP, and engineering precision.",
     type: "website",

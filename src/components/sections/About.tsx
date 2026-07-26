@@ -52,13 +52,13 @@ export default function About() {
 
             <div className="flex flex-col gap-4 font-mono text-xs md:text-sm text-[#6c757d] leading-relaxed max-w-lg">
               <p>
-                I&apos;m Saurav Punjabi, a frontend-focused fullstack developer based in Pune, India. 
+                I&apos;m Saurav Punjabi, a fullstack developer based in Pune, India.
                 I design and build software at the intersection of clean mathematical logic and physical 
                 craft — focusing on the small details that make an interface feel responsive and alive.
               </p>
               <p>
-                Currently completing my MCA at MIT-WPU while interning at Siddesh Technologies, I build 
-                highly interactive, visual systems using React, Next.js, and GSAP. I thrive on 
+                Completing my MCA at MIT-WPU, with an internship at Siddesh Technologies behind me, I build
+                highly interactive, visual systems using React, Next.js, and GSAP. I thrive on
                 solving UI bottlenecks, refining micro-interactions, and shipping production-grade code.
               </p>
             </div>

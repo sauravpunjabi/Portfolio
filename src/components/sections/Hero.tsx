@@ -123,7 +123,7 @@ export default function Hero({ isLoaded }: HeroProps) {
           {/* Descriptor line — two-column split */}
           <div className="hero-descriptor opacity-0 mt-10 w-full max-w-5xl flex justify-between items-center px-1 md:px-0">
             <span className="font-mono text-[9px] md:text-[11px] tracking-[0.22em] text-[#6c757d] uppercase">
-              Frontend-Focused Fullstack Dev
+              Fullstack Developer
             </span>
             <span className="font-mono text-[9px] md:text-[11px] tracking-[0.22em] text-[#6c757d] uppercase">
               Pune · India · 2026

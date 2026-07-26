@@ -8,6 +8,8 @@ export type Project = {
   longDescription: string;
   tags: string[];
   github: string;
+  /** Optional extra repos — when a project spans more than one codebase. */
+  repos?: { label: string; url: string }[];
   demo: string | null;
   featured: boolean;
   accentColor: string;
@@ -19,6 +21,68 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    id: "f1-mcp",
+    title: "F1-MCP",
+    subtitle: "MCP Server & Local LLM Client",
+    year: "2026",
+    category: "AI / Developer Tools",
+    description:
+      "An MCP server that lets AI agents query real Formula 1 data, plus a local-model client that consumes it.",
+    longDescription:
+      "A Python FastMCP server exposing my F1Pulse REST API as six AI-callable tools (standings, race results, driver profiles, driver comparisons, season champions, live status). Deployed with Docker on Render and secured with GitHub OAuth 2.1. Paired with a terminal client that connects a local llama3.1:8b model to the server — discovering tools at runtime, converting their schemas to Ollama's format, running the tool calls, and returning natural-language answers.",
+    tags: ["Python", "FastMCP", "Model Context Protocol", "Ollama", "Docker", "Render", "GitHub OAuth", "AsyncIO"],
+    github: "https://github.com/sauravpunjabi/f1pulse-mcp",
+    repos: [
+      { label: "server repo", url: "https://github.com/sauravpunjabi/f1pulse-mcp" },
+      { label: "client repo", url: "https://github.com/sauravpunjabi/ollama-mcp" },
+    ],
+    demo: null,
+    featured: true,
+    accentColor: "rgba(251, 146, 60, 0.08)",
+    problem:
+      "An LLM can reason about Formula 1 but it cannot look anything up — it has no access to live standings or historical results, and a REST API alone is unusable to a model that has no idea what endpoints exist or what arguments they take.",
+    solution:
+      "An MCP server that wraps the F1Pulse API as six self-describing tools any MCP-compatible agent can discover and call, plus a terminal client proving the loop end to end with a local llama3.1:8b model — no cloud LLM in the path.",
+    architecture: [
+      {
+        title: "Tool Layer",
+        description: "Six async FastMCP tools with pydantic-annotated arguments and Literal constraints, so the JSON schema the model receives documents itself.",
+      },
+      {
+        title: "API Client",
+        description: "A thin async httpx wrapper over the F1Pulse REST base URL with a central endpoint map, converting HTTP failures into typed errors the model can read.",
+      },
+      {
+        title: "Auth & Deployment",
+        description: "GitHub OAuth 2.1 via FastMCP's GitHubProvider gates every tool call; the server runs over streamable HTTP in a python:3.13-slim + uv Docker image on Render.",
+      },
+      {
+        title: "Local Model Client",
+        description: "An AsyncIO terminal loop: list tools, translate schemas to Ollama's function format, execute the calls the model requests, and feed results back until it answers in plain words.",
+      },
+    ],
+    challenges: [
+      {
+        title: "Schema Translation",
+        description: "MCP and Ollama describe tools differently. Converting inputSchema into Ollama's function format at runtime means the client needs no changes when the server gains a tool.",
+      },
+      {
+        title: "OAuth From A Terminal",
+        description: "Securing a remote MCP server with GitHub OAuth 2.1 while keeping a CLI client usable required the browser-based auth flow to hand its token back to a headless process.",
+      },
+      {
+        title: "Controlling An 8B Model",
+        description: "A small local model happily re-calls tools forever or dumps raw JSON at the user — solved with a hard cap on tool rounds, errors returned as tool messages instead of crashes, and a strict system prompt.",
+      },
+    ],
+    outcomes: [
+      "Six AI-callable F1 tools: standings, race results, driver profiles, driver comparisons, season champions, live weekend status",
+      "Remote MCP server deployed on Render over streamable HTTP, every tool call gated by GitHub OAuth 2.1",
+      "Runtime tool discovery — the client picks up new server-side tools with zero code changes",
+      "A local llama3.1:8b answering real Formula 1 questions in natural language with no cloud LLM calls",
+    ],
+  },
   {
     id: "f1pulse",
     title: "F1Pulse",
@@ -257,11 +321,11 @@ export const experience = [
   {
     id: "siddesh",
     company: "Siddesh Technologies",
-    role: "Frontend-Focused Fullstack Developer Intern",
-    period: "Feb 2026 – Present",
+    role: "Fullstack Developer Intern",
+    period: "Feb 2026 – Jun 2026",
     location: "Pune, India",
     type: "Full-time Internship",
-    current: true,
+    current: false,
     bullets: [
       "Owned end-to-end UI development for a client-facing web project, building and iterating on components from scratch",
       "Diagnosed and resolved frontend bugs across the application, improving stability and visual consistency",
